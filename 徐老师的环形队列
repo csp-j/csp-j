@@ -29,3 +29,26 @@ BGBGG
 3
 提示
 从第 333 个同学开始，往后要数 333 个人数到 111 号才是男生
+#include <bits/stdc++.h>
+using namespace std;
+using LL=long long;
+LL n,m;
+string s;
+int main() {
+	//freopen("array.in","r",stdin);
+	//freopen("array.out","w",stdout);
+	cin>>n>>m>>s;
+	LL t=m,ans=1;
+	if (t>n) {
+		t=0;
+	}
+	while (s[t]!='B') {
+		t++;
+		if (t>=n) {
+			t=0;
+		}
+		ans++;
+	}
+	cout<<ans<<"\n";
+	return 0;
+}
