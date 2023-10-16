@@ -1,0 +1,74 @@
+徐老师的考试祝福
+说明
+马上就要CSP考试啦，徐老师决定写一个程序来给大家送上祝福！
+
+徐老师先写了一个 pythonpythonpython 脚本用于随机生成字符串
+
+现在徐老师准备再写一个程序，从这个随机生成的字符串中选取 AKJSAKJSAKJS 作为给大家的祝愿
+
+徐老师认为一个字符串的祝福力度就是这个字符串中有多少个子序列可以形成 AKJSAKJSAKJS
+
+现在徐老师想知道，他现在生成的这个字符串中一共有多少个子序列可以形成 AKJSAKJSAKJS
+
+最后，祝愿大家都能 AK CSP−J/SAK\ CSP-J/SAK CSP−J/S！
+输入格式
+输入第一行包含一个整数 nnn 表示字符串长度
+输入第二行包含一个长度为 nnn 的字符串
+|测试点|字符串长度 lenlenlen|特殊性质|
+|:---:|:---:|:---:|
+|1∼31 \sim 31∼3|1≤len≤101 \leq len \leq 101≤len≤10|无|
+|4∼54 \sim 54∼5|1≤len≤10001 \leq len \leq 10001≤len≤1000|字符串形如A...AK...KJ...JS...SA...AK...KJ...JS...SA...AK...KJ...JS...S|
+|6∼76 \sim 76∼7|1≤len≤10001 \leq len \leq 10001≤len≤1000|无|
+|8∼108 \sim 108∼10|2≤len≤1000002 \leq len \leq 1000002≤len≤100000|无|
+
+对于所有数据保证，字符串中可能出现的字符只有大小写字母和数字
+输出格式
+输出这个字符串的祝福力度
+样例
+输入数据 1
+12
+AAKJQQKJSSdd
+Copy
+输出数据 1
+12
+Copy
+提示
+选第一个 KKK 的方案共有 2∗2∗2=82 * 2 * 2=82∗2∗2=8 种
+选第二个 KKK 的方案共有 2∗2=42 * 2 =42∗2=4 种
+共 8+4=128+4=128+4=12 种
+#include <bits/stdc++.h>
+using namespace std;
+using LL=long long;
+LL n,suma[100006],sums[100006],sumj[100006],a[100006],idx,ans;
+string s;
+int main() {
+	//freopen("wish.in","r",stdin);
+	//freopen("wish.out","w",stdout);
+	cin>>n>>s;
+	for (LL i=0;i<n;++i) {
+		LL v=i-1;
+		if (i-1<0) {
+			v=0;
+		}
+		suma[i]=suma[v]+(s[i]=='A');
+		sums[i]=sums[v]+(s[i]=='S');
+		if (s[i]=='K') {
+			a[++idx]=i;
+		}
+	}
+	for (LL i=n-1;i>=0;--i) {
+		if (s[i]=='J') {
+			LL k=sums[n-1]-sums[i];
+			sumj[i]=sumj[i+1]+k;
+		}else {
+			sumj[i]=sumj[i+1];
+		}
+		
+	}
+	for(LL i=1;i<=idx;++i) {
+		LL x=a[i];
+		ans+=suma[x-1]*sumj[x+1];
+	} 
+	cout<<ans<<"\n";
+	return 0;
+}
