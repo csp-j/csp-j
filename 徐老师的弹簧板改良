@@ -1,1 +1,82 @@
 徐老师的弹簧板改良
+说明
+大家都做过一个基础的递推题——《弹簧板》
+
+在一个长度为 nnn 的坐标轴上，每个坐标点 (1∼n)(1 \sim n)(1∼n) 都有一个弹簧板，第 iii 个弹簧力度为 bib_ibi​，当触发它的时候会将人弹到 i+bii + b_ii+bi​ 处
+
+现在徐老师想修改一下这道题里的弹簧板，让弹簧板不但可以向后，还能向前！
+
+修改后的弹簧板除了原本的属性 bib_ibi​ 表示向右弹的力度外，会获得另一个属性 aia_iai​ 表示向左弹的力度
+
+而因为向左弹的功能是徐老师加的，所以徐老师可以通过自身姿势/力量的调整使得他站在 iii 上时，可以跳到任意的位置 j(i−ai≤j≤i)j(i - a_i \leq j \leq i)j(i−ai​≤j≤i)
+
+但是当徐老师通过弹簧板向左跳到某个位置 jjj 后，他会被动的触发一次第 jjj 个弹簧向右弹的效果，即被弹到 j+bjj + b_jj+bj​
+
+现在徐老师想知道，他从 nnn 出发最少跳几次可以回到坐标 000 处？（这里我们认为坐标 000 处没有弹簧板）
+输入格式
+输入第一行包含一个整数 nnn 表示坐标轴长度
+输入第二行包含 nnn 个整数 aia_iai​ 分别表示第 iii 个弹簧向左弹的力度
+输入第三行包含 nnn 个整数 bib_ibi​ 分别表示第 iii 个弹簧向右弹的力度
+|测试点|nnn|
+|:---:|:---:|
+|1∼31 \sim 31∼3|1≤n≤5001 \leq n \leq 5001≤n≤500|
+|4∼54 \sim 54∼5|1≤n≤30001 \leq n \leq 30001≤n≤3000|
+|6∼106 \sim 106∼10|1≤n≤3∗1051 \leq n \leq 3 * 10^51≤n≤3∗105|
+
+对于所有数据保证：0≤ai≤i,0≤bi≤n−i0 \leq a_i \leq i, 0 \leq b_i \leq n-i0≤ai​≤i,0≤bi​≤n−i
+输出格式
+输出徐老师最少需要跳的次数，若无法回到 000 点则输出 −1-1−1
+
+样例
+输入数据 1
+10
+0 1 2 3 5 5 6 7 8 5
+9 8 7 1 5 4 3 2 0 0
+Copy
+输出数据 1
+3
+Copy
+提示
+跳跃路径为：
+1. 从 101010 跳到 999 被弹到 9+0=99+0=99+0=9
+2. 从 999 跳到 444 被弹到 4+1=54+1=54+1=5
+3. 从 555 跳到 000 结束
+#include <bits/stdc++.h>
+using namespace std;
+using LL=long long;
+LL n,b[300006],a[300006],dis[300006],f[300006];\
+int main() {
+	//freopen("spring.in","r",stdin);
+	//freopen("spring.out","w",stdout);
+	scanf("%lld",&n);
+	for (LL i=1;i<=n;++i) {
+		scanf("%lld",&a[i]);
+	}
+	for (LL i=1;i<=n;++i) {
+		scanf("%lld",&b[i]);
+	}
+	queue<LL> q;
+	q.push(n);
+	dis[n]=0;
+	f[n]=1;
+	LL now=n;
+	while (!q.empty()) {
+		LL t=q.front();
+		q.pop();
+		if (t==0) {
+			printf("%lld\n",dis[0]);
+			return 0;
+		}
+		for (LL i=t-a[t];i<=now-1;++i) {
+			LL k=i+b[i];
+			if (!f[k]) {
+				dis[k]=dis[t]+1;
+				f[k]=1;
+				q.push(k);
+			}
+		}
+		now=min(now,t-a[t]);
+	}
+	printf("-1\n");
+	return 0;
+}
